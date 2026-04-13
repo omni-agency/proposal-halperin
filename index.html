@@ -1,0 +1,1382 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>הצעת שירותים | OMNI × אופטיקה הלפרין</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=Frank+Ruhl+Libre:wght@400;500;700;900&display=swap');
+
+        :root {
+            --primary: #3b1219;
+            --secondary: #4a1a22;
+            --surface: #52202a;
+            --accent: #3b1219;
+            --accent-light: #6b2a35;
+            --accent-dark: #2d0d12;
+            --text: #2e1015;
+            --text-light: #7a5a60;
+            --bg: #faf7f4;
+            --cream: #f2ebe3;
+            --white: #ffffff;
+            --ivory: #f0e6da;
+            --glass: rgba(255,255,255,0.9);
+            --shadow: 0 4px 30px rgba(59,18,25,0.06);
+            --shadow-lg: 0 20px 60px rgba(59,18,25,0.1);
+            --gradient-brand: linear-gradient(135deg, #3b1219, #52202a);
+            --gradient-dark: linear-gradient(160deg, #3b1219 0%, #4a1a22 50%, #3b1219 100%);
+        }
+
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+
+        body {
+            font-family:'Heebo',sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            overflow-x:hidden;
+            line-height:1.8;
+        }
+
+        ::-webkit-scrollbar { width:5px; }
+        ::-webkit-scrollbar-track { background:var(--bg); }
+        ::-webkit-scrollbar-thumb { background:var(--primary); border-radius:3px; }
+
+        /* ── Progress ── */
+        .progress-bar {
+            position:fixed; top:0; right:0; height:3px;
+            background:var(--gradient-brand);
+            z-index:1001; width:0;
+        }
+
+        /* ── Nav ── */
+        .nav {
+            position:fixed; top:0; right:0; left:0; z-index:1000;
+            padding:.9rem 1.5rem;
+            transition:all .4s cubic-bezier(.4,0,.2,1);
+            display:flex; justify-content:center;
+        }
+        .nav.scrolled {
+            background:rgba(255,255,255,.92);
+            backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px);
+            box-shadow:0 1px 20px rgba(0,0,0,.06);
+            padding:.5rem 1.5rem;
+        }
+        .nav-inner {
+            display:flex; gap:.3rem;
+            background:rgba(0,0,0,.04);
+            border-radius:50px; padding:.25rem;
+            border:1px solid rgba(0,0,0,.04);
+        }
+        .nav-link {
+            color:var(--text-light); text-decoration:none;
+            font-size:.78rem; font-weight:500;
+            padding:.4rem 1rem; border-radius:50px;
+            transition:all .3s; white-space:nowrap;
+        }
+        .nav-link:hover { color:var(--text); }
+        .nav-link.active {
+            background:var(--primary); color:var(--ivory); font-weight:600;
+        }
+
+        /* ── Hero ── */
+        .hero {
+            min-height:100vh;
+            display:flex; align-items:center; justify-content:center;
+            position:relative; overflow:hidden;
+            background: linear-gradient(170deg, #faf7f4 0%, #f2ebe3 40%, #ede4d9 100%);
+        }
+        .hero-grid-bg {
+            position:absolute; inset:0; opacity:.035;
+            background-image:
+                repeating-linear-gradient(0deg,transparent,transparent 80px,rgba(0,0,0,.15) 80px,rgba(0,0,0,.15) 81px),
+                repeating-linear-gradient(90deg,transparent,transparent 80px,rgba(0,0,0,.15) 80px,rgba(0,0,0,.15) 81px);
+        }
+        .hero-orb {
+            position:absolute; border-radius:50%; filter:blur(100px); pointer-events:none;
+        }
+        .hero-orb-1 {
+            top:-10%; right:-5%; width:500px; height:500px;
+            background:rgba(59,18,25,.07);
+            animation:orbFloat 12s ease-in-out infinite alternate;
+        }
+        .hero-orb-2 {
+            bottom:-15%; left:-10%; width:450px; height:450px;
+            background:rgba(59,18,25,.04);
+            animation:orbFloat 12s ease-in-out infinite alternate-reverse;
+        }
+        @keyframes orbFloat {
+            0%{transform:translate(0,0) scale(1)} 100%{transform:translate(30px,-20px) scale(1.15)}
+        }
+
+        .hero-content { text-align:center; z-index:2; padding:2rem; max-width:800px; }
+
+        .hero-collab {
+            display:inline-flex; align-items:center; gap:1rem;
+            margin-bottom:2.5rem;
+            opacity:0; transform:translateY(20px);
+            animation:fadeUp .8s .3s forwards;
+        }
+        .hero-collab-brand {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:clamp(1rem,2.5vw,1.4rem);
+            font-weight:700; color:var(--primary); letter-spacing:2px;
+        }
+        .hero-collab-x {
+            font-size:.9rem; color:var(--accent-light); font-weight:300;
+        }
+        .hero-collab-client {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:clamp(1rem,2.5vw,1.4rem);
+            font-weight:700; color:var(--primary);
+        }
+
+        .hero-tagline {
+            font-size:clamp(.8rem,1.5vw,.9rem);
+            color:var(--text-light); letter-spacing:5px;
+            font-weight:300; margin-bottom:2rem;
+            opacity:0; transform:translateY(20px);
+            animation:fadeUp .8s .5s forwards;
+        }
+
+        .hero-title {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:clamp(2rem,5vw,3.5rem); font-weight:900;
+            color:var(--primary); line-height:1.2; margin-bottom:1rem;
+            opacity:0; transform:translateY(30px);
+            animation:fadeUp .8s .7s forwards;
+        }
+        .hero-title em {
+            font-style:normal;
+            background:linear-gradient(120deg, var(--primary), var(--accent-light));
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            background-clip:text;
+        }
+
+        .hero-desc {
+            font-size:clamp(.9rem,1.8vw,1.05rem);
+            color:var(--text-light); font-weight:300;
+            max-width:550px; margin:0 auto;
+            line-height:1.9;
+            opacity:0; transform:translateY(20px);
+            animation:fadeUp .8s .9s forwards;
+        }
+
+        .hero-divider {
+            width:50px; height:1px;
+            background:linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin:2rem auto;
+            opacity:0; animation:fadeUp .8s 1.1s forwards;
+        }
+
+        .hero-label {
+            font-size:.82rem; color:var(--text-light);
+            opacity:0; animation:fadeUp .8s 1.3s forwards;
+        }
+
+        .hero-scroll {
+            position:absolute; bottom:2.5rem; left:50%;
+            transform:translateX(-50%); z-index:2;
+            opacity:0; animation:fadeUp .8s 1.6s forwards;
+        }
+        .hero-scroll a {
+            display:flex; flex-direction:column; align-items:center;
+            color:var(--text-light); text-decoration:none;
+            font-size:.7rem; gap:.5rem;
+        }
+        .scroll-arrow {
+            width:18px; height:18px;
+            border-left:1.5px solid var(--primary);
+            border-bottom:1.5px solid var(--primary);
+            transform:rotate(-45deg);
+            animation:scrollBounce 2.5s infinite;
+        }
+        @keyframes scrollBounce {
+            0%,100%{transform:rotate(-45deg) translate(0,0);opacity:.3}
+            50%{transform:rotate(-45deg) translate(4px,4px);opacity:1}
+        }
+        @keyframes fadeUp { to{opacity:1;transform:translateY(0)} }
+
+        /* ── Sections ── */
+        .section { padding:5rem 2rem; max-width:960px; margin:0 auto; }
+        .section-wide { padding:5rem 2rem; }
+        .section-header { text-align:center; margin-bottom:3rem; }
+        .section-number {
+            display:inline-block; font-size:.75rem;
+            color:var(--primary); letter-spacing:5px; font-weight:500;
+            margin-bottom:.4rem;
+        }
+        .section-title {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:clamp(1.6rem,3.5vw,2.3rem); font-weight:700;
+            color:var(--primary);
+        }
+        .section-subtitle {
+            font-size:.92rem; color:var(--text-light); margin-top:.5rem;
+            max-width:500px; margin-left:auto; margin-right:auto;
+        }
+        .section-line {
+            width:35px; height:1.5px;
+            background:var(--gradient-brand);
+            margin:1rem auto 0;
+        }
+
+        /* ── Reveal ── */
+        .reveal {
+            opacity:0; transform:translateY(30px);
+            transition:all .7s cubic-bezier(.4,0,.2,1);
+        }
+        .reveal.visible { opacity:1; transform:translateY(0); }
+
+        /* ── Cards ── */
+        .card {
+            background:var(--white); border-radius:20px;
+            padding:2.5rem; box-shadow:var(--shadow);
+            border:1px solid rgba(0,0,0,.04);
+            transition:border-color .3s, transform .3s;
+        }
+        .card:hover { border-color:rgba(59,18,25,.15); }
+
+        /* ── Vision Section ── */
+        .vision-card {
+            position:relative; overflow:hidden;
+        }
+        .vision-card::before {
+            content:''; position:absolute; top:0; right:0;
+            width:4px; height:100%;
+            background:var(--gradient-brand);
+        }
+        .vision-text {
+            font-size:1rem; line-height:2.1; color:var(--text);
+        }
+        .vision-text strong { color:var(--primary); font-weight:700; }
+        .vision-highlight {
+            background:linear-gradient(120deg, rgba(59,18,25,.06), rgba(59,18,25,.12));
+            border-right:3px solid var(--primary);
+            padding:1.2rem 1.5rem; border-radius:0 14px 14px 0;
+            margin:1.5rem 0; font-size:.97rem; line-height:2;
+        }
+        .vision-magazine {
+            display:inline-block;
+            background:var(--primary); color:var(--accent-light);
+            padding:.3rem 1rem; border-radius:8px;
+            font-weight:600; font-size:.95rem;
+        }
+
+        .smart-choice {
+            display:flex; gap:1rem; margin-top:2rem;
+            flex-wrap:wrap; justify-content:center;
+        }
+        .smart-choice-item {
+            background:rgba(59,18,25,.06);
+            border:1px solid rgba(59,18,25,.12);
+            border-radius:12px; padding:.8rem 1.5rem;
+            font-size:.9rem; font-weight:500; color:var(--text);
+            display:flex; align-items:center; gap:.5rem;
+            transition:all .3s;
+        }
+        .smart-choice-item:hover {
+            background:rgba(59,18,25,.12);
+            border-color:rgba(59,18,25,.25);
+        }
+        .smart-choice-item::before {
+            content:''; width:8px; height:8px;
+            background:var(--gradient-brand); border-radius:50%;
+            flex-shrink:0;
+        }
+
+        /* ── Strategy ── */
+        .strategy-grid {
+            display:grid; grid-template-columns:repeat(3, 1fr);
+            gap:1.5rem;
+        }
+        .strategy-card {
+            background:var(--white); border-radius:18px;
+            padding:2rem; box-shadow:var(--shadow);
+            text-align:center; border:1px solid transparent;
+            transition:all .4s;
+        }
+        .strategy-card:hover {
+            border-color:rgba(59,18,25,.2);
+            transform:translateY(-4px);
+            box-shadow:var(--shadow-lg);
+        }
+        .strategy-num {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:2rem; font-weight:900;
+            background:var(--gradient-brand);
+            -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+            background-clip:text;
+            margin-bottom:.5rem;
+        }
+        .strategy-card h4 {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:1.05rem; font-weight:700; color:var(--primary);
+            margin-bottom:.5rem;
+        }
+        .strategy-card p {
+            font-size:.87rem; color:var(--text-light); line-height:1.8;
+        }
+
+        /* ── Included Services ── */
+        .included-section {
+            background:var(--gradient-dark); padding:4rem 2rem;
+            position:relative; overflow:hidden;
+        }
+        .included-section::before {
+            content:''; position:absolute; inset:0; opacity:.03;
+            background-image:
+                repeating-linear-gradient(0deg,transparent,transparent 60px,rgba(255,255,255,.3) 60px,rgba(255,255,255,.3) 61px),
+                repeating-linear-gradient(90deg,transparent,transparent 60px,rgba(255,255,255,.3) 60px,rgba(255,255,255,.3) 61px);
+        }
+        .included-grid {
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+            gap:1rem; max-width:960px; margin:0 auto;
+            position:relative; z-index:2;
+        }
+        .included-item {
+            display:flex; align-items:flex-start; gap:.8rem;
+            padding:1rem;
+        }
+        .included-item::before {
+            content:'✦'; color:var(--ivory); font-size:.7rem;
+            margin-top:.3rem; flex-shrink:0;
+        }
+        .included-item span {
+            color:rgba(255,255,255,.7); font-size:.9rem; line-height:1.7;
+        }
+        .included-badge {
+            display:inline-block;
+            background:rgba(240,230,218,.12);
+            border:1px solid rgba(240,230,218,.2);
+            color:var(--ivory);
+            padding:.4rem 1.4rem; border-radius:50px;
+            font-size:.8rem; font-weight:500;
+        }
+
+        /* ── Included Light Grid ── */
+        .included-light-grid {
+            display:grid; grid-template-columns:repeat(2, 1fr);
+            gap:1rem;
+        }
+        .included-light-item {
+            display:flex; align-items:flex-start; gap:1rem;
+            padding:1.1rem; border-radius:14px;
+            border:1px solid rgba(59,18,25,.06);
+            transition:all .3s;
+        }
+        .included-light-item:hover {
+            background:rgba(59,18,25,.02);
+            border-color:rgba(59,18,25,.12);
+        }
+        .included-light-icon {
+            width:40px; height:40px; border-radius:10px;
+            background:rgba(59,18,25,.05);
+            display:flex; align-items:center; justify-content:center;
+            flex-shrink:0;
+        }
+        .included-light-item strong {
+            display:block; font-size:.92rem; font-weight:600;
+            color:var(--primary); margin-bottom:.15rem;
+        }
+        .included-light-item p {
+            font-size:.82rem; color:var(--text-light); line-height:1.6; margin:0;
+        }
+        @media(max-width:768px) {
+            .included-light-grid { grid-template-columns:1fr; }
+        }
+
+        /* ── Platform Packages ── */
+        .packages-grid {
+            display:grid; grid-template-columns:repeat(2, 1fr);
+            gap:1.5rem;
+        }
+        .package-card {
+            background:var(--white); border-radius:20px;
+            padding:2rem; box-shadow:var(--shadow);
+            border:2px solid transparent;
+            transition:all .4s; cursor:default;
+            position:relative; overflow:hidden;
+        }
+        .package-card::before {
+            content:''; position:absolute; top:0; right:0; left:0;
+            height:3px; background:var(--gradient-brand);
+            opacity:0; transition:opacity .3s;
+        }
+        .package-card:hover::before { opacity:1; }
+        .package-card:hover {
+            border-color:rgba(59,18,25,.15);
+            transform:translateY(-3px);
+            box-shadow:var(--shadow-lg);
+        }
+        .package-card.selected {
+            border-color:var(--primary);
+        }
+        .package-card.selected::before { opacity:1; }
+
+        .package-icon {
+            width:48px; height:48px; border-radius:14px;
+            display:flex; align-items:center; justify-content:center;
+            margin-bottom:1.2rem; font-size:1.3rem;
+        }
+        .package-icon.instagram { background:linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }
+        .package-icon.tiktok { background:linear-gradient(135deg, #010101, #25f4ee); }
+        .package-icon.facebook { background:linear-gradient(135deg, #1877f2, #42a5f5); }
+        .package-icon.whatsapp { background:linear-gradient(135deg, #25d366, #128c7e); }
+
+        .package-name {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:1.2rem; font-weight:700; color:var(--primary);
+            margin-bottom:.3rem;
+        }
+        .package-price {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:1.8rem; font-weight:700; color:var(--primary);
+            margin-bottom:.2rem;
+        }
+        .package-price span { font-size:.55em; font-weight:400; color:var(--text-light); }
+        .package-features {
+            list-style:none; margin-top:1rem;
+            border-top:1px solid rgba(0,0,0,.05); padding-top:1rem;
+        }
+        .package-features li {
+            padding:.35rem 0; padding-right:1.3rem;
+            position:relative; font-size:.88rem;
+            color:var(--text-light); line-height:1.7;
+        }
+        .package-features li::before {
+            content:''; position:absolute; right:0; top:.7rem;
+            width:6px; height:6px; border-radius:50%;
+            background:var(--primary);
+        }
+
+        .package-select {
+            display:block; width:100%; margin-top:1.2rem;
+            padding:.7rem; border-radius:12px;
+            border:1.5px solid rgba(59,18,25,.25);
+            background:transparent; color:var(--primary);
+            font-family:'Heebo',sans-serif; font-size:.88rem;
+            font-weight:600; cursor:pointer;
+            transition:all .3s;
+        }
+        .package-select:hover {
+            background:rgba(59,18,25,.06);
+            border-color:var(--primary);
+        }
+        .package-select.active {
+            background:var(--primary); color:var(--ivory);
+            border-color:var(--primary);
+        }
+
+        /* ── ALL-IN ── */
+        .allin-section {
+            background:var(--gradient-dark); padding:5rem 2rem;
+            position:relative; overflow:hidden;
+        }
+        .allin-section::before {
+            content:''; position:absolute;
+            top:-100px; right:-100px; width:500px; height:500px;
+            background:radial-gradient(circle, rgba(59,18,25,.08) 0%, transparent 70%);
+        }
+        .allin-card {
+            max-width:700px; margin:0 auto;
+            background:rgba(255,255,255,.03);
+            border:1px solid rgba(240,230,218,.15);
+            border-radius:28px; padding:3rem;
+            text-align:center; position:relative; z-index:2;
+            backdrop-filter:blur(10px);
+        }
+        .allin-badge {
+            display:inline-block;
+            background:var(--ivory);
+            color:var(--primary); padding:.4rem 1.5rem;
+            border-radius:50px; font-size:.82rem; font-weight:700;
+            letter-spacing:2px; margin-bottom:1.5rem;
+        }
+        .allin-title {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:clamp(1.5rem,3.5vw,2.2rem); font-weight:900;
+            color:var(--white); margin-bottom:1rem;
+        }
+        .allin-platforms {
+            display:flex; justify-content:center; gap:.8rem;
+            flex-wrap:wrap; margin-bottom:2rem;
+        }
+        .allin-platforms span {
+            background:rgba(255,255,255,.06);
+            border:1px solid rgba(255,255,255,.08);
+            color:rgba(255,255,255,.6);
+            padding:.4rem 1rem; border-radius:50px;
+            font-size:.82rem; font-weight:400;
+        }
+        .allin-old-price {
+            font-size:1.3rem; color:rgba(255,255,255,.3);
+            text-decoration:line-through; font-weight:300;
+        }
+        .allin-price {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:clamp(3rem,7vw,4.5rem); font-weight:700;
+            color:var(--white); line-height:1;
+            margin:.5rem 0;
+        }
+        .allin-price span { font-size:.35em; color:var(--ivory); font-weight:400; }
+        .allin-per { font-size:.9rem; color:rgba(255,255,255,.4); }
+        .allin-save {
+            display:inline-block; margin-top:1.2rem;
+            background:rgba(99,202,110,.12);
+            border:1px solid rgba(99,202,110,.2);
+            color:#63ca6e; padding:.35rem 1.2rem;
+            border-radius:50px; font-size:.82rem; font-weight:600;
+        }
+
+        /* ── Production ── */
+        .production-card {
+            background:var(--white); border-radius:24px;
+            padding:2.5rem; box-shadow:var(--shadow);
+            border:1px solid rgba(0,0,0,.04);
+        }
+        .production-header {
+            display:flex; justify-content:space-between; align-items:flex-start;
+            flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;
+        }
+        .production-title {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:1.4rem; font-weight:700; color:var(--primary);
+        }
+        .production-price-tag {
+            background:var(--primary); color:var(--ivory);
+            padding:.6rem 1.5rem; border-radius:14px;
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:1.3rem; font-weight:700;
+        }
+        .production-desc {
+            font-size:.93rem; color:var(--text-light); line-height:1.9;
+            margin-bottom:1.5rem;
+        }
+        .production-features {
+            display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+            gap:.8rem;
+        }
+        .production-feature {
+            display:flex; align-items:center; gap:.7rem;
+            padding:.6rem .8rem; border-radius:10px;
+            background:rgba(59,18,25,.04);
+        }
+        .production-feature::before {
+            content:'✓'; color:var(--primary); font-weight:700; flex-shrink:0;
+        }
+        .production-feature span {
+            font-size:.9rem; color:var(--text);
+        }
+        .production-note {
+            margin-top:1.5rem; padding:1rem 1.3rem;
+            background:rgba(59,18,25,.06);
+            border:1px solid rgba(59,18,25,.1);
+            border-radius:12px; font-size:.87rem;
+            color:var(--text-light); line-height:1.8;
+        }
+        .production-note strong { color:var(--primary); }
+
+        /* ── Clarifications ── */
+        .clarity-list {
+            display:flex; flex-direction:column; gap:.6rem;
+        }
+        .clarity-item {
+            background:var(--white); border-radius:14px;
+            padding:1.1rem 1.5rem; box-shadow:var(--shadow);
+            display:flex; align-items:flex-start; gap:.8rem;
+            border:1px solid transparent;
+            transition:border-color .3s;
+        }
+        .clarity-item:hover {
+            border-color:rgba(59,18,25,.15);
+        }
+        .clarity-icon {
+            width:32px; height:32px; border-radius:8px;
+            background:rgba(59,18,25,.08);
+            display:flex; align-items:center; justify-content:center;
+            flex-shrink:0; margin-top:.1rem;
+        }
+        .clarity-icon svg { width:16px; height:16px; stroke:var(--primary); }
+        .clarity-item p {
+            font-size:.9rem; color:var(--text-light); line-height:1.8;
+        }
+
+        /* ── Summary / CTA ── */
+        .summary-section {
+            background:var(--cream); padding:4rem 2rem;
+        }
+        .summary-card {
+            max-width:700px; margin:0 auto;
+            text-align:center;
+        }
+        .summary-text {
+            font-size:1.05rem; color:var(--text); line-height:2;
+            margin-bottom:1rem;
+        }
+        .summary-text strong { color:var(--primary); }
+        .summary-highlight {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:1.2rem; font-weight:700; color:var(--primary);
+            margin:1.5rem 0;
+        }
+
+        .cta-button {
+            display:inline-flex; align-items:center; gap:.7rem;
+            background:var(--gradient-brand);
+            color:var(--ivory); padding:1rem 2.5rem;
+            border-radius:50px; text-decoration:none;
+            font-weight:600; font-size:1rem;
+            box-shadow:0 8px 30px rgba(59,18,25,.3);
+            transition:all .4s; border:none; cursor:pointer;
+            margin-top:1.5rem;
+        }
+        .cta-button:hover {
+            transform:translateY(-2px);
+            box-shadow:0 12px 40px rgba(59,18,25,.4);
+        }
+        .cta-button svg { width:18px; height:18px; }
+
+        /* ── Signature ── */
+        .signature-section {
+            background:var(--white); border-radius:24px;
+            padding:3rem; box-shadow:var(--shadow);
+            border:2px dashed rgba(59,18,25,.2);
+        }
+        .signature-grid {
+            display:grid; grid-template-columns:1fr 1fr;
+            gap:2rem; margin-top:2rem;
+        }
+        .signature-field { display:flex; flex-direction:column; gap:.5rem; }
+        .signature-field label {
+            font-size:.82rem; font-weight:600; color:var(--text-light);
+        }
+        .field-input {
+            width:100%; border:none;
+            border-bottom:2px solid var(--primary);
+            padding:.5rem 0; min-height:2rem;
+            font-size:1rem; color:var(--primary);
+            font-family:'Heebo',sans-serif;
+            background:transparent; outline:none;
+            transition:border-color .3s;
+        }
+        .field-input:focus {
+            border-color:var(--accent-light);
+        }
+        .field-input::placeholder {
+            color:#ccc;
+        }
+        .signature-field .field-line {
+            border-bottom:2px solid var(--primary);
+            padding-bottom:.5rem; min-height:2rem;
+            font-size:1rem; color:var(--primary); outline:none;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            background:var(--primary); padding:3rem 2rem; text-align:center;
+        }
+        .footer-brand {
+            font-size:.85rem; letter-spacing:6px;
+            color:rgba(255,255,255,.3); font-weight:300;
+            margin-bottom:.3rem;
+        }
+        .footer-tagline {
+            font-size:.78rem; color:rgba(255,255,255,.18);
+            letter-spacing:3px; margin-bottom:1.5rem;
+        }
+        .footer-contact {
+            display:flex; justify-content:center; gap:2rem; flex-wrap:wrap;
+            margin-bottom:1.5rem;
+        }
+        .footer-contact a {
+            color:rgba(255,255,255,.4); text-decoration:none;
+            font-size:.85rem; transition:color .3s;
+        }
+        .footer-contact a:hover { color:var(--ivory); }
+        .footer-line {
+            width:30px; height:1px;
+            background:rgba(255,255,255,.08); margin:1.5rem auto;
+        }
+        .footer-copy { color:rgba(255,255,255,.15); font-size:.72rem; }
+
+        /* ── Pricing Calculator ── */
+        .calc-section {
+            background:var(--cream); border-radius:20px;
+            padding:2.5rem; margin-top:2.5rem;
+        }
+        .calc-title {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:1.2rem; font-weight:700; color:var(--primary);
+            text-align:center; margin-bottom:1.5rem;
+        }
+        .calc-row {
+            display:flex; justify-content:space-between; align-items:center;
+            padding:.7rem 0; border-bottom:1px solid rgba(0,0,0,.05);
+            font-size:.93rem;
+        }
+        .calc-row:last-child { border-bottom:none; }
+        .calc-row .label { color:var(--text-light); }
+        .calc-row .value { font-weight:600; color:var(--primary); }
+        .calc-row.total {
+            border-top:2px solid var(--primary);
+            border-bottom:none; margin-top:.5rem; padding-top:1rem;
+        }
+        .calc-row.total .label {
+            font-weight:700; color:var(--primary); font-size:1rem;
+        }
+        .calc-row.total .value {
+            font-family:'Frank Ruhl Libre',serif;
+            font-size:1.4rem; color:var(--primary); font-weight:700;
+        }
+        .calc-row.savings .value {
+            color:#4caf50; font-weight:600;
+        }
+        .calc-note {
+            text-align:center; margin-top:1rem;
+            font-size:.82rem; color:var(--text-light);
+        }
+
+        /* ── Responsive ── */
+        @media(max-width:768px) {
+            .section,.section-wide { padding:3rem 1.2rem; }
+            .strategy-grid { grid-template-columns:1fr; }
+            .packages-grid { grid-template-columns:1fr; }
+            .signature-grid { grid-template-columns:1fr; }
+            .nav-inner { gap:.15rem; padding:.2rem; overflow-x:auto; }
+            .nav-link { font-size:.7rem; padding:.35rem .7rem; }
+            .allin-card { padding:2rem 1.5rem; }
+            .footer-contact { flex-direction:column; gap:.6rem; }
+            .production-header { flex-direction:column; }
+        }
+
+        @media print {
+            .nav,.hero-scroll,.progress-bar { display:none; }
+            .hero { min-height:auto; padding:3rem; }
+            .reveal { opacity:1; transform:none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Progress -->
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- Nav -->
+<nav class="nav" id="navbar">
+    <div class="nav-inner">
+        <a href="#vision" class="nav-link">תפיסה</a>
+        <a href="#strategy" class="nav-link">אסטרטגיה</a>
+        <a href="#services" class="nav-link">שירותים</a>
+        <a href="#packages" class="nav-link">חבילות</a>
+        <a href="#allin" class="nav-link">ALL-IN</a>
+        <a href="#production" class="nav-link">הפקה</a>
+        <a href="#signature" class="nav-link">חתימה</a>
+    </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero" id="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-content">
+        <div class="hero-client-logo" style="margin-bottom:1.8rem; opacity:0; transform:translateY(20px); animation:fadeUp .8s .15s forwards;">
+            <img src="https://optica-halperin.com/wp-content/uploads/2025/05/cropped-logo-roeim-300x115.jpg" alt="אופטיקה הלפרין" style="height:60px; border-radius:10px;">
+        </div>
+        <div class="hero-collab">
+            <span class="hero-collab-brand">OMNI</span>
+            <span class="hero-collab-x">&times;</span>
+            <span class="hero-collab-client">אופטיקה הלפרין</span>
+        </div>
+        <div class="hero-tagline">CREATIVE &bull; STRATEGY &bull; EXECUTION</div>
+        <h1 class="hero-title">הצעת שירותים<br><em>לנוכחות דיגיטלית מובילה</em></h1>
+        <p class="hero-desc">
+            להפוך את הנוכחות הדיגיטלית של אופטיקה הלפרין למגזין אופטיקה וסטייל &mdash; תוכן שמשאיר חותם
+        </p>
+        <div class="hero-divider"></div>
+        <p class="hero-label">הצעת שירותים מקיפה</p>
+    </div>
+    <div class="hero-scroll">
+        <a href="#vision">
+            <span>גלול למטה</span>
+            <div class="scroll-arrow"></div>
+        </a>
+    </div>
+</section>
+
+<!-- Vision -->
+<section class="section" id="vision">
+    <div class="reveal">
+        <div class="section-header">
+            <span class="section-number">01</span>
+            <h2 class="section-title">תפיסת המותג</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="card vision-card">
+            <p class="vision-text">
+                <strong>אופטיקה הלפרין</strong> הינה רשת האופטיקה הגדולה והמקצועית בישראל, עם עשרות שנות ניסיון, פריסה ארצית רחבה ונגישות יוצאת דופן לצרכן הישראלי. המותג ביסס את עצמו לאורך השנים כמי ש<strong>שבר את השוק</strong> והנגיש איכות ומחיר לכלל האוכלוסייה.
+            </p>
+            <p class="vision-text" style="margin-top:1rem;">
+                המטרה שלנו היא לקחת את אופטיקה הלפרין ולשקף אותה באינסטגרם ובשאר הפלטפורמות בצורה <strong>אסתטית, עכשווית ומדויקת</strong> תוך שמירה מלאה על ערכי המותג. להפוך את הנוכחות הדיגיטלית ל<strong>מגזין אופטיקה וסטייל</strong>.
+            </p>
+            <p class="vision-text" style="margin-top:1rem;">
+                המומחיות שלנו היא זיקוק ה-DNA של המותג ותרגומו לזהות ויזואלית דיגיטלית, אסתטית וממגנטת. דרך סטוריטלינג חזותי ושפה עקבית, אנחנו הופכים כל פריים לסיפור אותנטי &mdash; והופכים את העמוד ל<strong>נכס דיגיטלי בעל חיבור רגשי עמוק</strong>.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Strategy -->
+<section class="section" id="strategy">
+    <div class="reveal">
+        <div class="section-header">
+            <span class="section-number">02</span>
+            <h2 class="section-title">עקרונות אסטרטגיים</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="strategy-grid">
+            <div class="strategy-card reveal">
+                <div class="strategy-num">01</div>
+                <h4>פיתוח תפיסת המותג</h4>
+                <p>שמירה על הבסיס של הלפרין כ״רשת של מבצעים״, תוך תרגום זה לעולם הדיגיטלי כבחירה חכמה, נגישה ואסתטית.</p>
+            </div>
+            <div class="strategy-card reveal">
+                <div class="strategy-num">02</div>
+                <h4>בניית סמכות מקצועית</h4>
+                <p>הדגשת 40 שנות ניסיון, מסורת, משפחתיות ואמינות &mdash; ביסוס אמון דרך תוכן מקצועי ואותנטי.</p>
+            </div>
+            <div class="strategy-card reveal">
+                <div class="strategy-num">03</div>
+                <h4>הצגת המגוון והפריסה</h4>
+                <p>המחשת הכוח של רשת רחבה בפריסה ארצית &mdash; נוכחות בכל מקום כחלק בלתי נפרד מהנגישות של המותג.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Included Services -->
+<section class="section" id="services">
+    <div class="reveal">
+        <div class="section-header">
+            <span class="section-number">03</span>
+            <h2 class="section-title">ניהול אסטרטגי וקריאייטיב</h2>
+            <p class="section-subtitle">כלול בכל החבילות</p>
+            <div class="section-line"></div>
+        </div>
+        <div class="card" style="padding:0; overflow:hidden;">
+            <div style="background:var(--primary); padding:1.2rem 2.5rem; display:flex; align-items:center; gap:.8rem;">
+                <svg width="20" height="20" fill="none" stroke="var(--ivory)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                <span style="color:var(--ivory); font-size:.88rem; font-weight:500; letter-spacing:1px;">כלול בכל חבילה שתבחרו</span>
+            </div>
+            <div style="padding:2rem 2.5rem;">
+                <div class="included-light-grid">
+                    <div class="included-light-item">
+                        <div class="included-light-icon">
+                            <svg width="20" height="20" fill="none" stroke="var(--primary)" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                        </div>
+                        <div>
+                            <strong>אסטרטגיה ותוכנית תוכן</strong>
+                            <p>גיבוש אסטרטגיה ותוכנית תוכן חודשית מותאמת</p>
+                        </div>
+                    </div>
+                    <div class="included-light-item">
+                        <div class="included-light-icon">
+                            <svg width="20" height="20" fill="none" stroke="var(--primary)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 19l7-7 3 3-7 7-3-3z"/><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="M2 2l7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
+                        </div>
+                        <div>
+                            <strong>שפה חזותית</strong>
+                            <p>בניית שפה חזותית אחידה ומדויקת למותג</p>
+                        </div>
+                    </div>
+                    <div class="included-light-item">
+                        <div class="included-light-icon">
+                            <svg width="20" height="20" fill="none" stroke="var(--primary)" stroke-width="1.5" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        </div>
+                        <div>
+                            <strong>קריאייטיב וקונספטים</strong>
+                            <p>פיתוח קונספטים לתוכן ולימי צילום</p>
+                        </div>
+                    </div>
+                    <div class="included-light-item">
+                        <div class="included-light-icon">
+                            <svg width="20" height="20" fill="none" stroke="var(--primary)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                        </div>
+                        <div>
+                            <strong>תכנון גריד</strong>
+                            <p>עיצוב ותכנון נראות הפיד</p>
+                        </div>
+                    </div>
+                    <div class="included-light-item">
+                        <div class="included-light-icon">
+                            <svg width="20" height="20" fill="none" stroke="var(--primary)" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        </div>
+                        <div>
+                            <strong>גאנט תוכן</strong>
+                            <p>ניהול גאנט וסנכרון מול צוותי המותג</p>
+                        </div>
+                    </div>
+                    <div class="included-light-item">
+                        <div class="included-light-icon">
+                            <svg width="20" height="20" fill="none" stroke="var(--primary)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                        </div>
+                        <div>
+                            <strong>עבודה מול השיווק</strong>
+                            <p>עבודה שוטפת מול גורמי השיווק של המותג</p>
+                        </div>
+                    </div>
+                    <div class="included-light-item">
+                        <div class="included-light-icon">
+                            <svg width="20" height="20" fill="none" stroke="var(--primary)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                        </div>
+                        <div>
+                            <strong>אישור תוכנית</strong>
+                            <p>אישור חודשי מראש לתוכנית התוכן</p>
+                        </div>
+                    </div>
+                    <div class="included-light-item">
+                        <div class="included-light-icon">
+                            <svg width="20" height="20" fill="none" stroke="var(--primary)" stroke-width="1.5" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+                        </div>
+                        <div>
+                            <strong>משפיענים ושיתופי פעולה</strong>
+                            <p>יצירת קשר עם משפיענים וקידום שיתופי פעולה</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Platform Packages -->
+<section class="section" id="packages">
+    <div class="reveal">
+        <div class="section-header">
+            <span class="section-number">04</span>
+            <h2 class="section-title">חבילות לפי פלטפורמה</h2>
+            <p class="section-subtitle">בחרו את הפלטפורמות הרלוונטיות עבורכם, או עברו ישירות לחבילת ALL-IN</p>
+            <div class="section-line"></div>
+        </div>
+        <div class="packages-grid">
+            <!-- Instagram -->
+            <div class="package-card reveal" data-price="10000" data-name="אינסטגרם">
+                <div class="package-icon instagram">
+                    <svg width="22" height="22" fill="white" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </div>
+                <div class="package-name">אינסטגרם</div>
+                <div class="package-price">10,000 &#8362; <span>+ מע״מ / חודש</span></div>
+                <ul class="package-features">
+                    <li>4-6 תכנים מרכזיים בחודש (רילסים/קרוסלות)</li>
+                    <li>ניהול סטוריז יומי (1-3 סטוריז ביום)</li>
+                    <li>בניית גריד ונראות פיד</li>
+                    <li>כתיבה שיווקית (קופי)</li>
+                    <li>התאמת טרנדים ושפה עכשווית למותג</li>
+                </ul>
+                <button class="package-select" onclick="togglePackage(this)">בחירת חבילה</button>
+            </div>
+
+            <!-- TikTok -->
+            <div class="package-card reveal" data-price="10000" data-name="טיקטוק">
+                <div class="package-icon tiktok">
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.88-2.88 2.89 2.89 0 012.88-2.88c.28 0 .56.04.82.11v-3.5a6.37 6.37 0 00-.82-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.28 8.28 0 005.58 2.17V11.7a4.85 4.85 0 01-3.72-1.83V2h3.72v4.69z"/></svg>
+                </div>
+                <div class="package-name">טיקטוק</div>
+                <div class="package-price">10,000 &#8362; <span>+ מע״מ / חודש</span></div>
+                <ul class="package-features">
+                    <li>4-6 סרטונים בחודש</li>
+                    <li>פיתוח קונספטים מותאמים לפלטפורמה</li>
+                    <li>עבודה עם טרנדים ושפה טבעית</li>
+                    <li>התאמת התוכן לקהל צעיר ודינמי</li>
+                    <li>כתיבת קופי וכיתובים מותאמי טיקטוק</li>
+                </ul>
+                <button class="package-select" onclick="togglePackage(this)">בחירת חבילה</button>
+            </div>
+
+            <!-- Facebook -->
+            <div class="package-card reveal" data-price="5000" data-name="פייסבוק">
+                <div class="package-icon facebook">
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </div>
+                <div class="package-name">פייסבוק</div>
+                <div class="package-price">5,000 &#8362; <span>+ מע״מ / חודש</span></div>
+                <ul class="package-features">
+                    <li>התאמת תכנים מהאינסטגרם לפייסבוק</li>
+                    <li>פרסום 8-12 תכנים חודשיים</li>
+                    <li>התאמות קופי לקהל הפלטפורמה</li>
+                    <li>שמירה על נוכחות מותגית עקבית</li>
+                </ul>
+                <button class="package-select" onclick="togglePackage(this)">בחירת חבילה</button>
+            </div>
+
+            <!-- WhatsApp -->
+            <div class="package-card reveal" data-price="5000" data-name="וואטסאפ">
+                <div class="package-icon whatsapp">
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                </div>
+                <div class="package-name">וואטסאפ</div>
+                <div class="package-price">5,000 &#8362; <span>+ מע״מ / חודש</span></div>
+                <ul class="package-features">
+                    <li>הקמה וניהול ערוץ תוכן/מכירה</li>
+                    <li>8-12 הודעות חודשיות</li>
+                    <li>ניסוח מסרים מכירתיים בסגנון ערוצי תוכן</li>
+                    <li>חיבור בין מבצעים, השראה ותוכן</li>
+                </ul>
+                <button class="package-select" onclick="togglePackage(this)">בחירת חבילה</button>
+            </div>
+        </div>
+
+        <!-- Interactive Calculator -->
+        <div class="calc-section reveal" id="calculator">
+            <div class="calc-title">סיכום הבחירה שלכם</div>
+            <div id="calcRows">
+                <div class="calc-row">
+                    <span class="label" style="color:var(--text-light);font-style:italic;">בחרו חבילות למעלה כדי לראות את הסיכום</span>
+                </div>
+            </div>
+            <div class="calc-note">
+                או &mdash; <a href="#allin" style="color:var(--primary);font-weight:600;">בחרו בחבילת ALL-IN</a> וקבלו הנחה משמעותית
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ALL-IN -->
+<section class="allin-section section-wide" id="allin">
+    <div class="reveal">
+        <div class="section-header">
+            <span class="section-number" style="color:var(--ivory)">05</span>
+            <h2 class="section-title" style="color:var(--white)">חבילת ALL-IN</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="allin-card">
+            <div class="allin-badge">BEST VALUE</div>
+            <h3 class="allin-title">ניהול מלא של כל הפלטפורמות</h3>
+            <div class="allin-platforms">
+                <span>אינסטגרם</span>
+                <span>טיקטוק</span>
+                <span>פייסבוק</span>
+                <span>וואטסאפ</span>
+            </div>
+            <div class="allin-old-price">30,000 &#8362;</div>
+            <div class="allin-price">25,000 <span>&#8362;</span></div>
+            <div class="allin-per">+ מע״מ / לחודש</div>
+        </div>
+    </div>
+</section>
+
+<!-- Production -->
+<section class="section" id="production">
+    <div class="reveal">
+        <div class="section-header">
+            <span class="section-number">06</span>
+            <h2 class="section-title">הפקה וימי צילום</h2>
+            <p class="section-subtitle">על מנת לייצר תוכן איכותי ועקבי, נדרש מינימום של יום צילום אחד בחודש</p>
+            <div class="section-line"></div>
+        </div>
+        <div class="production-card">
+            <div class="production-header">
+                <div>
+                    <div class="production-title">יום צילום סטנדרטי</div>
+                    <p style="font-size:.88rem;color:var(--text-light);">לדוגמא - יום צילום באחד או יותר מסניפי הרשת</p>
+                </div>
+                <div class="production-price-tag">4,000 &#8362; + מע״מ</div>
+            </div>
+            <p class="production-desc">
+                יום צילום סטנדרטי מהווה בסיס ליצירת תוכן שוטף לפלטפורמות הדיגיטליות. מספר ימי צילום: <strong>1-2 ימים בחודש</strong> (בהתאם לצרכים ובתיאום משותף).
+            </p>
+            <ul class="feature-list">
+                <li><strong>בניית קריאייטיב</strong> &mdash; פיתוח קונספט והכנה ליום הצילום</li>
+                <li><strong>צילום מקצועי</strong> &mdash; צילום וידאו וסטילס במיקום</li>
+                <li><strong>4 רילסים ערוכים</strong> &mdash; צילום, עריכה והתאמה לפלטפורמות</li>
+                <li><strong>תמונות סטילס</strong> &mdash; לשימוש שוטף בפלטפורמות השונות</li>
+                <li><strong>עד 2 סבבי תיקונים</strong> &mdash; עבור הרילסים מתוך יום הצילום</li>
+            </ul>
+            <p style="margin-top:1.2rem; font-size:.78rem; color:var(--text-light);">* הפקות מורכבות (דוגמניות, לוקיישנים, סטיילינג וכו׳) יתומחרו בנפרד.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Clarifications -->
+<section class="section" id="clarifications">
+    <div class="reveal">
+        <div class="section-header">
+            <span class="section-number">07</span>
+            <h2 class="section-title">גבולות והבהרות</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="clarity-list">
+            <div class="clarity-item reveal">
+                <div class="clarity-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                </div>
+                <p>השירות אינו כולל מענה להודעות, תגובות או שירות לקוחות</p>
+            </div>
+            <div class="clarity-item reveal">
+                <div class="clarity-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                </div>
+                <p>השירות אינו כולל ניהול קמפיינים ממומנים (ניתן להוסיף בתמחור נפרד)</p>
+            </div>
+            <div class="clarity-item reveal">
+                <div class="clarity-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                </div>
+                <p>יצירת קשר עם משפיענים אינה כוללת את עלות התשלום למשפיען עצמו</p>
+            </div>
+            <div class="clarity-item reveal">
+                <div class="clarity-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                </div>
+                <p>כל תוכן כפוף לאישור חודשי מראש</p>
+            </div>
+            <div class="clarity-item reveal">
+                <div class="clarity-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </div>
+                <p>העבודה מתבצעת בהתאם לתוכנית תוכן חודשית מסודרת</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Summary -->
+<section class="summary-section">
+    <div class="reveal">
+        <div class="summary-card">
+            <div class="section-header">
+                <span class="section-number">08</span>
+                <h2 class="section-title">סיכום</h2>
+                <div class="section-line"></div>
+            </div>
+            <p class="summary-text">
+                המטרה היא לא רק ״לנהל עמודים״ &mdash; אלא <strong>לבנות נכס דיגיטלי חזק, עקבי ובעל חיבור רגשי לקהל</strong>.
+            </p>
+            <p class="summary-text">
+                באמצעות שילוב של אסטרטגיה, קריאייטיב וביצוע מדויק &mdash;<br>
+                אנחנו הופכים את אופטיקה הלפרין ל<strong>מותג דיגיטלי מוביל בקטגוריה</strong>, שמייצר השראה, אמון ובחירה.
+            </p>
+            <a href="#signature" class="cta-button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                לחתימה על ההצעה
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Signature -->
+<section class="section" id="signature">
+    <div class="reveal">
+        <div class="section-header">
+            <span class="section-number">09</span>
+            <h2 class="section-title">חתימה ואישור</h2>
+            <div class="section-line"></div>
+        </div>
+        <div class="signature-section">
+            <p style="text-align:center;color:var(--text-light);margin-bottom:1rem;font-size:.92rem;">
+                בחתימתי על הצעה זו אני מאשר/ת כי קראתי את כל התנאים המפורטים לעיל ואני מסכים/ה להם.
+            </p>
+            <form id="signatureForm" action="https://formsubmit.co/rotemziv262@gmail.com" method="POST">
+                <input type="hidden" name="_subject" value="חתימה על הצעת שירותים - אופטיקה הלפרין">
+                <input type="hidden" name="_captcha" value="false">
+                <input type="hidden" name="_template" value="table">
+                <input type="hidden" name="_next" id="formRedirect">
+                <div class="signature-grid">
+                    <div class="signature-field">
+                        <label for="sig-date">תאריך</label>
+                        <input type="text" id="sig-date" name="תאריך" class="field-input" placeholder="הקלד/י תאריך..." required>
+                    </div>
+                    <div class="signature-field">
+                        <label for="sig-name">שם מלא</label>
+                        <input type="text" id="sig-name" name="שם מלא" class="field-input" placeholder="שם מלא..." required>
+                    </div>
+                    <div class="signature-field">
+                        <label for="sig-role">תפקיד</label>
+                        <input type="text" id="sig-role" name="תפקיד" class="field-input" placeholder="תפקיד...">
+                    </div>
+                    <div class="signature-field">
+                        <label for="sig-signature">חתימה</label>
+                        <input type="text" id="sig-signature" name="חתימה" class="field-input" placeholder="חתימה..." required>
+                    </div>
+                </div>
+                <div style="text-align:center; margin-top:2rem;">
+                    <button type="submit" class="cta-button" id="submitBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                        חתימה ושליחה
+                    </button>
+                </div>
+            </form>
+            <div id="successMsg" style="display:none; text-align:center; padding:2rem;">
+                <div style="font-size:2.5rem; margin-bottom:1rem;">✓</div>
+                <h3 style="font-family:'Frank Ruhl Libre',serif; font-size:1.3rem; color:var(--primary); margin-bottom:.5rem;">ההצעה נחתמה ונשלחה בהצלחה</h3>
+                <p style="color:var(--text-light); font-size:.92rem;">תודה רבה, ניצור איתך קשר בהקדם.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-brand">OMNI</div>
+    <div class="footer-tagline">Creative. Strategy. Execution.</div>
+    <div class="footer-contact">
+        <a href="mailto:rotemziv262@gmail.com">rotemziv262@gmail.com</a>
+        <a href="tel:0544455986">054-4455986</a>
+        <a href="tel:0502722039">050-272-2039</a>
+    </div>
+    <div class="footer-line"></div>
+    <p class="footer-copy">&copy; OMNI 2026 &mdash; All rights reserved</p>
+</footer>
+
+<script>
+    // Progress bar
+    window.addEventListener('scroll', () => {
+        const s = document.documentElement.scrollTop;
+        const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        document.getElementById('progressBar').style.width = (s/h*100)+'%';
+    });
+
+    // Navbar
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 80);
+    });
+
+    // Active nav
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    window.addEventListener('scroll', () => {
+        let cur = '';
+        sections.forEach(s => {
+            if(window.scrollY >= s.offsetTop - 200) cur = s.id;
+        });
+        navLinks.forEach(l => {
+            l.classList.toggle('active', l.getAttribute('href') === '#'+cur);
+        });
+    });
+
+    // Reveal
+    const observer = new IntersectionObserver(entries => {
+        entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold:0.06, rootMargin:'0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Stagger
+    document.querySelectorAll('.strategy-card').forEach((c,i) => c.style.transitionDelay=(i*.12)+'s');
+    document.querySelectorAll('.package-card').forEach((c,i) => c.style.transitionDelay=(i*.1)+'s');
+    document.querySelectorAll('.clarity-item').forEach((c,i) => c.style.transitionDelay=(i*.08)+'s');
+
+    // Package selection & calculator
+    const selectedPackages = new Set();
+
+    function togglePackage(btn) {
+        const card = btn.closest('.package-card');
+        const name = card.dataset.name;
+        const price = parseInt(card.dataset.price);
+
+        if(selectedPackages.has(name)) {
+            selectedPackages.delete(name);
+            card.classList.remove('selected');
+            btn.classList.remove('active');
+            btn.textContent = 'בחירת חבילה';
+        } else {
+            selectedPackages.add(name);
+            card.classList.add('selected');
+            btn.classList.add('active');
+            btn.textContent = '✓ נבחר';
+        }
+        updateCalculator();
+    }
+
+    function updateCalculator() {
+        const container = document.getElementById('calcRows');
+        container.innerHTML = '';
+
+        if(selectedPackages.size === 0) {
+            container.innerHTML = '<div class="calc-row"><span class="label" style="color:var(--text-light);font-style:italic;">בחרו חבילות למעלה כדי לראות את הסיכום</span></div>';
+            return;
+        }
+
+        let total = 0;
+        const cards = document.querySelectorAll('.package-card');
+        cards.forEach(card => {
+            if(selectedPackages.has(card.dataset.name)) {
+                const price = parseInt(card.dataset.price);
+                total += price;
+                const row = document.createElement('div');
+                row.className = 'calc-row';
+                row.innerHTML = `<span class="label">${card.dataset.name}</span><span class="value">${price.toLocaleString()} &#8362; + מע״מ</span>`;
+                container.appendChild(row);
+            }
+        });
+
+        // Show savings if all 4 selected
+        if(selectedPackages.size === 4) {
+            const savingsRow = document.createElement('div');
+            savingsRow.className = 'calc-row savings';
+            savingsRow.innerHTML = `<span class="label">חיסכון עם חבילת ALL-IN</span><span class="value">-5,000 &#8362;</span>`;
+            container.appendChild(savingsRow);
+
+            const totalRow = document.createElement('div');
+            totalRow.className = 'calc-row total';
+            totalRow.innerHTML = `<span class="label">סה״כ (ALL-IN)</span><span class="value">25,000 &#8362; + מע״מ / חודש</span>`;
+            container.appendChild(totalRow);
+        } else {
+            const totalRow = document.createElement('div');
+            totalRow.className = 'calc-row total';
+            totalRow.innerHTML = `<span class="label">סה״כ לחודש</span><span class="value">${total.toLocaleString()} &#8362; + מע״מ</span>`;
+            container.appendChild(totalRow);
+        }
+    }
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+        a.addEventListener('click', e => {
+            e.preventDefault();
+            const t = document.querySelector(a.getAttribute('href'));
+            if(t) t.scrollIntoView({behavior:'smooth',block:'start'});
+        });
+    });
+
+    // Form redirect URL (back to same page)
+    document.getElementById('formRedirect').value = window.location.href.split('#')[0] + '?signed=true#signature';
+
+    // Signature form submit via fetch (stay on page)
+    document.getElementById('signatureForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = this;
+        const btn = document.getElementById('submitBtn');
+        btn.innerHTML = '<span>שולח...</span>';
+        btn.style.opacity = '.6';
+        btn.disabled = true;
+
+        fetch(form.action, {
+            method: 'POST',
+            body: new FormData(form),
+            headers: { 'Accept': 'application/json' }
+        }).then(response => {
+            if(response.ok) {
+                form.style.display = 'none';
+                document.getElementById('successMsg').style.display = 'block';
+            } else {
+                btn.innerHTML = 'שגיאה, נסו שוב';
+                btn.style.opacity = '1';
+                btn.disabled = false;
+            }
+        }).catch(() => {
+            btn.innerHTML = 'שגיאה, נסו שוב';
+            btn.style.opacity = '1';
+            btn.disabled = false;
+        });
+    });
+
+    // Check if returned from successful submission
+    if(window.location.search.includes('signed=true')) {
+        const form = document.getElementById('signatureForm');
+        if(form) form.style.display = 'none';
+        const msg = document.getElementById('successMsg');
+        if(msg) msg.style.display = 'block';
+    }
+</script>
+</body>
+</html>
