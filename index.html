@@ -862,17 +862,70 @@
             font-size:.82rem; color:var(--text-light);
         }
 
-        /* ── Responsive ── */
+        /* ── Responsive Mobile ── */
         @media(max-width:768px) {
+            /* Disable scroll-snap on mobile */
+            html { scroll-snap-type:none; }
+            .snap-section {
+                height:auto; min-height:auto;
+                scroll-snap-align:none;
+                overflow:visible;
+                contain:none;
+            }
+            .hero {
+                height:auto; min-height:100svh;
+                scroll-snap-align:none;
+                overflow:visible;
+                contain:none;
+            }
+
+            /* Logo in hero */
+            .hero-logo-img { height:300px; }
+
+            /* Fixed top bar */
+            .fixed-top-bar { padding:1rem 1.2rem; }
+            .fixed-top-right { font-size:.65rem; letter-spacing:1px; }
+            .fixed-top-left { font-size:.65rem; letter-spacing:1px; }
+
+            /* Nav */
+            .nav-inner { gap:.15rem; padding:.2rem; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+            .nav-link { font-size:.65rem; padding:.3rem .5rem; }
+
+            /* Sections */
             .section,.section-wide { padding:3rem 1.2rem; }
+
+            /* Strategy */
             .strategy-grid { grid-template-columns:1fr; }
+
+            /* Included services */
+            .included-light-grid { grid-template-columns:1fr; }
+
+            /* Packages - 2 columns */
             .packages-grid { grid-template-columns:1fr 1fr; }
-            .signature-grid { grid-template-columns:1fr; }
-            .nav-inner { gap:.15rem; padding:.2rem; overflow-x:auto; }
-            .nav-link { font-size:.7rem; padding:.35rem .7rem; }
-            .allin-card { padding:2rem 1.5rem; }
-            .footer-contact { flex-direction:column; gap:.6rem; }
+
+            /* ALL-IN */
+            .allin-card { padding:2rem 1.2rem; }
+            .allin-price { font-size:clamp(2rem,10vw,3rem); }
+
+            /* Production */
             .production-header { flex-direction:column; }
+
+            /* Signature */
+            .signature-grid { grid-template-columns:1fr; }
+            .signature-section { padding:2rem 1.2rem; }
+
+            /* Footer */
+            .footer-contact { flex-direction:column; gap:.6rem; }
+
+            /* Bottom logos - smaller on mobile */
+            .section-bottom-logo img { height:160px; }
+            .section-bottom-logo { bottom:-60px; }
+
+            /* Cards */
+            .card, .phase-section, .production-card { padding:1.5rem; }
+
+            /* Vision card */
+            .vision-card { padding:1.5rem; }
         }
 
         @media print {
