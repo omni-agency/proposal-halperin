@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>הצעת שירותים | OMNI × אופטיקה הלפרין</title>
     <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
 
     <!-- Open Graph / WhatsApp Preview -->
     <meta property="og:type" content="website">
@@ -1197,7 +1198,7 @@
                 </div>
                 <ul class="package-features">
                     <li>הקמה וניהול ערוץ תוכן/מכירה</li>
-                    <li>8-12 הודעות חודשיות</li>
+                    <li>ניהול תוכן יומי</li>
                     <li>ניסוח מסרים מכירתיים בסגנון ערוצי תוכן</li>
                     <li>חיבור בין מבצעים, השראה ותוכן</li>
                 </ul>
@@ -1545,13 +1546,86 @@
     // Set redirect URL back to this page with success flag
     document.getElementById('formRedirect').value = window.location.href.split('?')[0] + '?signed=true';
 
+    // Intercept form submit - generate PDF first, then submit
+    document.getElementById('signatureForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const form = this;
+        const btn = document.getElementById('submitBtn');
+        btn.innerHTML = 'מייצר PDF ושולח...';
+        btn.style.opacity = '.6';
+        btn.disabled = true;
+
+        // Hide elements we don't want in the PDF
+        const navbar = document.getElementById('navbar');
+        const fixedBar = document.getElementById('fixedTopBar');
+        const progressBar = document.getElementById('progressBar');
+        const scrollArrow = document.querySelector('.hero-scroll');
+        const bottomLogos = document.querySelectorAll('.section-bottom-logo');
+        const submitBtnWrap = btn.parentElement;
+
+        navbar.style.display = 'none';
+        fixedBar.style.display = 'none';
+        progressBar.style.display = 'none';
+        if(scrollArrow) scrollArrow.style.display = 'none';
+        bottomLogos.forEach(l => l.style.display = 'none');
+        submitBtnWrap.style.display = 'none';
+
+        // Temporarily remove scroll-snap for PDF generation
+        const htmlEl = document.documentElement;
+        const origSnap = htmlEl.style.cssText;
+        htmlEl.style.scrollSnapType = 'none';
+        document.querySelectorAll('.snap-section').forEach(s => {
+            s.style.height = 'auto';
+            s.style.minHeight = 'auto';
+            s.style.scrollSnapAlign = 'none';
+            s.style.overflow = 'visible';
+            s.style.contain = 'none';
+        });
+        const heroEl = document.querySelector('.hero');
+        heroEl.style.height = 'auto';
+        heroEl.style.minHeight = '60vh';
+
+        const signerName = document.getElementById('sig-name').value || 'document';
+
+        const opt = {
+            margin: [10, 10, 10, 10],
+            filename: 'OMNI_x_Optica_Halperin_' + signerName.replace(/\s+/g, '_') + '.pdf',
+            image: { type: 'jpeg', quality: 0.95 },
+            html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+            jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+            pagebreak: { mode: ['css', 'legacy'] }
+        };
+
+        html2pdf().set(opt).from(document.body).save().then(() => {
+            // Restore layout
+            htmlEl.style.cssText = origSnap;
+            document.querySelectorAll('.snap-section').forEach(s => {
+                s.style.height = '';
+                s.style.minHeight = '';
+                s.style.scrollSnapAlign = '';
+                s.style.overflow = '';
+                s.style.contain = '';
+            });
+            heroEl.style.height = '';
+            heroEl.style.minHeight = '';
+            navbar.style.display = '';
+            fixedBar.style.display = '';
+            progressBar.style.display = '';
+            if(scrollArrow) scrollArrow.style.display = '';
+            bottomLogos.forEach(l => l.style.display = '');
+            submitBtnWrap.style.display = '';
+
+            // Now submit the form to FormSubmit
+            form.submit();
+        });
+    });
+
     // Show success message if returned from form submission
     if(window.location.search.includes('signed=true')) {
         const form = document.getElementById('signatureForm');
         if(form) form.style.display = 'none';
         const msg = document.getElementById('successMsg');
         if(msg) msg.style.display = 'block';
-        // Scroll to signature section
         setTimeout(() => {
             const sig = document.getElementById('signature');
             if(sig) sig.scrollIntoView({behavior:'smooth'});
