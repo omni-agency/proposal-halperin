@@ -883,7 +883,11 @@
             .hero-logo-img { height:300px; }
 
             /* Fixed top bar */
-            .fixed-top-bar { padding:1rem 1.2rem; }
+            .fixed-top-bar {
+                padding:1rem 1.2rem;
+                transition:opacity .4s;
+            }
+            .fixed-top-bar.mobile-hidden { opacity:0; pointer-events:none; }
             .fixed-top-right { font-size:.65rem; letter-spacing:1px; }
             .fixed-top-left { font-size:.65rem; letter-spacing:1px; }
 
@@ -1440,10 +1444,15 @@
     const heroEl = document.querySelector('.hero');
     const navLinks = document.querySelectorAll('.nav-link');
 
-    // Show navbar after hero
+    // Show navbar after hero + hide top bar on mobile after hero
+    const fixedTopBar = document.getElementById('fixedTopBar');
+    const isMobile = window.matchMedia('(max-width:768px)').matches;
     const heroObserver = new IntersectionObserver(entries => {
         entries.forEach(e => {
             navbar.classList.toggle('scrolled', !e.isIntersecting);
+            if (isMobile) {
+                fixedTopBar.classList.toggle('mobile-hidden', !e.isIntersecting);
+            }
         });
     }, { threshold: 0.3 });
     heroObserver.observe(heroEl);
