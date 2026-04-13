@@ -57,7 +57,7 @@
         }
 
         * { margin:0; padding:0; box-sizing:border-box; }
-        html { scroll-behavior:smooth; scroll-snap-type:y proximity; }
+        html { scroll-behavior:smooth; scroll-snap-type:y mandatory; }
 
         body {
             font-family:'OS Aran','Heebo',sans-serif;
@@ -154,6 +154,7 @@
             position:relative;
             background:var(--ivory);
             scroll-snap-align:start;
+            scroll-snap-stop:always;
             overflow:clip;
             contain:paint;
         }
@@ -197,6 +198,7 @@
         .snap-section {
             height:100vh;
             scroll-snap-align:start;
+            scroll-snap-stop:always;
             display:flex; flex-direction:column;
             justify-content:center;
             align-items:center;
@@ -950,6 +952,38 @@
             .hero { min-height:auto; padding:3rem; }
             .reveal { opacity:1; transform:none; }
         }
+
+        /* PDF generation mode - applied to cloned element only */
+        .pdf-mode .nav,
+        .pdf-mode .fixed-top-bar,
+        .pdf-mode .progress-bar,
+        .pdf-mode .hero-scroll,
+        .pdf-mode .section-bottom-logo,
+        .pdf-mode .floating-calc,
+        .pdf-mode #submitBtn { display:none !important; }
+
+        .pdf-mode { scroll-snap-type:none !important; }
+        .pdf-mode .snap-section {
+            height:auto !important; min-height:auto !important;
+            scroll-snap-align:none !important;
+            overflow:visible !important;
+            contain:none !important;
+            page-break-after:always;
+        }
+        .pdf-mode .hero {
+            height:auto !important; min-height:50vh !important;
+            overflow:visible !important;
+            contain:none !important;
+            page-break-after:always;
+        }
+        .pdf-mode .reveal { opacity:1 !important; transform:none !important; }
+        .pdf-mode .card,
+        .pdf-mode .strategy-card,
+        .pdf-mode .package-card,
+        .pdf-mode .production-card,
+        .pdf-mode .clarity-item,
+        .pdf-mode .signature-section { page-break-inside:avoid; }
+        .pdf-mode .footer { page-break-before:avoid; }
     </style>
 </head>
 <body>
@@ -1546,76 +1580,70 @@
     // Set redirect URL back to this page with success flag
     document.getElementById('formRedirect').value = window.location.href.split('?')[0] + '?signed=true';
 
-    // Intercept form submit - generate PDF first, then submit
+    // Intercept form submit - generate PDF from clone, send via email, no DOM changes
     document.getElementById('signatureForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const form = this;
         const btn = document.getElementById('submitBtn');
-        btn.innerHTML = 'מייצר PDF ושולח...';
+        btn.innerHTML = 'שולח...';
         btn.style.opacity = '.6';
         btn.disabled = true;
 
-        // Hide elements we don't want in the PDF
-        const navbar = document.getElementById('navbar');
-        const fixedBar = document.getElementById('fixedTopBar');
-        const progressBar = document.getElementById('progressBar');
-        const scrollArrow = document.querySelector('.hero-scroll');
-        const bottomLogos = document.querySelectorAll('.section-bottom-logo');
-        const submitBtnWrap = btn.parentElement;
-
-        navbar.style.display = 'none';
-        fixedBar.style.display = 'none';
-        progressBar.style.display = 'none';
-        if(scrollArrow) scrollArrow.style.display = 'none';
-        bottomLogos.forEach(l => l.style.display = 'none');
-        submitBtnWrap.style.display = 'none';
-
-        // Temporarily remove scroll-snap for PDF generation
-        const htmlEl = document.documentElement;
-        const origSnap = htmlEl.style.cssText;
-        htmlEl.style.scrollSnapType = 'none';
-        document.querySelectorAll('.snap-section').forEach(s => {
-            s.style.height = 'auto';
-            s.style.minHeight = 'auto';
-            s.style.scrollSnapAlign = 'none';
-            s.style.overflow = 'visible';
-            s.style.contain = 'none';
-        });
-        const heroEl = document.querySelector('.hero');
-        heroEl.style.height = 'auto';
-        heroEl.style.minHeight = '60vh';
-
         const signerName = document.getElementById('sig-name').value || 'document';
+        const signerDate = document.getElementById('sig-date').value || '';
+        const signerRole = document.getElementById('sig-role').value || '';
+
+        // Clone the entire body into a hidden container for PDF
+        const clone = document.body.cloneNode(true);
+        clone.classList.add('pdf-mode');
+        const container = document.createElement('div');
+        container.style.position = 'absolute';
+        container.style.left = '-9999px';
+        container.style.top = '0';
+        container.style.width = '1200px';
+        container.appendChild(clone);
+        document.body.appendChild(container);
 
         const opt = {
-            margin: [10, 10, 10, 10],
-            filename: 'OMNI_x_Optica_Halperin_' + signerName.replace(/\s+/g, '_') + '.pdf',
-            image: { type: 'jpeg', quality: 0.95 },
-            html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+            margin: [8, 8, 8, 8],
+            image: { type: 'jpeg', quality: 0.92 },
+            html2canvas: { scale: 1.5, useCORS: true, scrollY: 0, width: 1200 },
             jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-            pagebreak: { mode: ['css', 'legacy'] }
+            pagebreak: { mode: ['css'] }
         };
 
-        html2pdf().set(opt).from(document.body).save().then(() => {
-            // Restore layout
-            htmlEl.style.cssText = origSnap;
-            document.querySelectorAll('.snap-section').forEach(s => {
-                s.style.height = '';
-                s.style.minHeight = '';
-                s.style.scrollSnapAlign = '';
-                s.style.overflow = '';
-                s.style.contain = '';
-            });
-            heroEl.style.height = '';
-            heroEl.style.minHeight = '';
-            navbar.style.display = '';
-            fixedBar.style.display = '';
-            progressBar.style.display = '';
-            if(scrollArrow) scrollArrow.style.display = '';
-            bottomLogos.forEach(l => l.style.display = '');
-            submitBtnWrap.style.display = '';
+        html2pdf().set(opt).from(clone).outputPdf('blob').then(pdfBlob => {
+            // Remove clone
+            document.body.removeChild(container);
 
-            // Now submit the form to FormSubmit
+            // Build FormData with PDF attached
+            const formData = new FormData();
+            formData.append('_subject', 'הצעת שירותים חתומה - אופטיקה הלפרין - ' + signerName);
+            formData.append('_captcha', 'false');
+            formData.append('_template', 'table');
+            formData.append('_next', window.location.href.split('?')[0] + '?signed=true');
+            formData.append('שם מלא', signerName);
+            formData.append('תאריך', signerDate);
+            formData.append('תפקיד', signerRole);
+            formData.append('חתימה', document.getElementById('sig-signature').value);
+            formData.append('attachment', pdfBlob, 'OMNI_x_Optica_Halperin_' + signerName.replace(/\s+/g,'_') + '.pdf');
+
+            // Send via FormSubmit with attachment
+            return fetch('https://formsubmit.co/ajax/rotemziv262@gmail.com', {
+                method: 'POST',
+                body: formData,
+                headers: { 'Accept': 'application/json' }
+            });
+        }).then(response => {
+            if(response.ok) {
+                form.style.display = 'none';
+                document.getElementById('successMsg').style.display = 'block';
+            } else {
+                // Fallback - submit form without PDF
+                form.submit();
+            }
+        }).catch(() => {
+            // Fallback - submit form without PDF
             form.submit();
         });
     });
