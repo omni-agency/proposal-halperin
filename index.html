@@ -1349,44 +1349,20 @@
         });
     });
 
-    // Form redirect URL (back to same page)
-    document.getElementById('formRedirect').value = window.location.href.split('#')[0] + '?signed=true#signature';
+    // Set redirect URL back to this page with success flag
+    document.getElementById('formRedirect').value = window.location.href.split('?')[0] + '?signed=true';
 
-    // Signature form submit via fetch (stay on page)
-    document.getElementById('signatureForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const form = this;
-        const btn = document.getElementById('submitBtn');
-        btn.innerHTML = '<span>שולח...</span>';
-        btn.style.opacity = '.6';
-        btn.disabled = true;
-
-        fetch(form.action, {
-            method: 'POST',
-            body: new FormData(form),
-            headers: { 'Accept': 'application/json' }
-        }).then(response => {
-            if(response.ok) {
-                form.style.display = 'none';
-                document.getElementById('successMsg').style.display = 'block';
-            } else {
-                btn.innerHTML = 'שגיאה, נסו שוב';
-                btn.style.opacity = '1';
-                btn.disabled = false;
-            }
-        }).catch(() => {
-            btn.innerHTML = 'שגיאה, נסו שוב';
-            btn.style.opacity = '1';
-            btn.disabled = false;
-        });
-    });
-
-    // Check if returned from successful submission
+    // Show success message if returned from form submission
     if(window.location.search.includes('signed=true')) {
         const form = document.getElementById('signatureForm');
         if(form) form.style.display = 'none';
         const msg = document.getElementById('successMsg');
         if(msg) msg.style.display = 'block';
+        // Scroll to signature section
+        setTimeout(() => {
+            const sig = document.getElementById('signature');
+            if(sig) sig.scrollIntoView({behavior:'smooth'});
+        }, 500);
     }
 </script>
 </body>
