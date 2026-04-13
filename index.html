@@ -1402,11 +1402,12 @@
             <p style="text-align:center;color:var(--text-light);margin-bottom:1rem;font-size:.92rem;">
                 בחתימתי על הצעה זו אני מאשר/ת כי קראתי את כל התנאים המפורטים לעיל ואני מסכים/ה להם.
             </p>
-            <form id="signatureForm" action="https://formsubmit.co/rotemziv262@gmail.com" method="POST">
-                <input type="hidden" name="_subject" value="חתימה על הצעת שירותים - אופטיקה הלפרין">
+            <form id="signatureForm" action="https://formsubmit.co/rotemziv262@gmail.com" method="POST" enctype="multipart/form-data">
+                <input type="hidden" name="_subject" value="הצעת שירותים חתומה - אופטיקה הלפרין">
                 <input type="hidden" name="_captcha" value="false">
                 <input type="hidden" name="_template" value="table">
                 <input type="hidden" name="_next" id="formRedirect">
+                <input type="file" name="attachment" id="pdfAttachment" style="display:none;">
                 <div class="signature-grid">
                     <div class="signature-field">
                         <label for="sig-date">תאריך</label>
@@ -1580,18 +1581,19 @@
     // Set redirect URL back to this page with success flag
     document.getElementById('formRedirect').value = window.location.href.split('?')[0] + '?signed=true';
 
-    // Intercept form submit - generate PDF from clone, send via email, no DOM changes
+    // Intercept form submit - generate PDF from clone, attach to form, submit
+    let pdfReady = false;
     document.getElementById('signatureForm').addEventListener('submit', function(e) {
+        if (pdfReady) return; // Let the form submit normally with PDF attached
         e.preventDefault();
+
         const form = this;
         const btn = document.getElementById('submitBtn');
-        btn.innerHTML = 'שולח...';
+        btn.innerHTML = 'מכין הצעה חתומה...';
         btn.style.opacity = '.6';
         btn.disabled = true;
 
         const signerName = document.getElementById('sig-name').value || 'document';
-        const signerDate = document.getElementById('sig-date').value || '';
-        const signerRole = document.getElementById('sig-role').value || '';
 
         // Clone the entire body into a hidden container for PDF
         const clone = document.body.cloneNode(true);
@@ -1616,34 +1618,22 @@
             // Remove clone
             document.body.removeChild(container);
 
-            // Build FormData with PDF attached
-            const formData = new FormData();
-            formData.append('_subject', 'הצעת שירותים חתומה - אופטיקה הלפרין - ' + signerName);
-            formData.append('_captcha', 'false');
-            formData.append('_template', 'table');
-            formData.append('_next', window.location.href.split('?')[0] + '?signed=true');
-            formData.append('שם מלא', signerName);
-            formData.append('תאריך', signerDate);
-            formData.append('תפקיד', signerRole);
-            formData.append('חתימה', document.getElementById('sig-signature').value);
-            formData.append('attachment', pdfBlob, 'OMNI_x_Optica_Halperin_' + signerName.replace(/\s+/g,'_') + '.pdf');
+            // Attach PDF to the hidden file input
+            const fileName = 'OMNI_x_Optica_Halperin_' + signerName.replace(/\s+/g,'_') + '.pdf';
+            const file = new File([pdfBlob], fileName, { type: 'application/pdf' });
+            const dt = new DataTransfer();
+            dt.items.add(file);
+            document.getElementById('pdfAttachment').files = dt.files;
 
-            // Send via FormSubmit with attachment
-            return fetch('https://formsubmit.co/ajax/rotemziv262@gmail.com', {
-                method: 'POST',
-                body: formData,
-                headers: { 'Accept': 'application/json' }
-            });
-        }).then(response => {
-            if(response.ok) {
-                form.style.display = 'none';
-                document.getElementById('successMsg').style.display = 'block';
-            } else {
-                // Fallback - submit form without PDF
-                form.submit();
-            }
+            // Update subject with signer name
+            form.querySelector('[name="_subject"]').value = 'הצעת שירותים חתומה - אופטיקה הלפרין - ' + signerName;
+
+            // Submit form normally with PDF attached
+            pdfReady = true;
+            form.submit();
         }).catch(() => {
-            // Fallback - submit form without PDF
+            // Fallback - submit without PDF
+            pdfReady = true;
             form.submit();
         });
     });
