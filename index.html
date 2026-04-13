@@ -512,11 +512,11 @@
             margin-bottom:.5rem;
         }
         .package-icon {
-            width:20px; height:20px; border-radius:5px;
+            width:18px; height:18px; border-radius:4px;
             display:flex; align-items:center; justify-content:center;
             flex-shrink:0;
         }
-        .package-icon svg { width:12px; height:12px; }
+        .package-icon svg { width:10px; height:10px; }
         .package-icon.instagram { background:linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }
         .package-icon.tiktok { background:#000000; }
         .package-icon.facebook { background:linear-gradient(135deg, #1877f2, #42a5f5); }
@@ -632,7 +632,7 @@
         }
         .production-header {
             display:flex; justify-content:space-between; align-items:flex-start;
-            flex-wrap:wrap; gap:1rem; margin-bottom:1.5rem;
+            flex-wrap:wrap; gap:1rem; margin-bottom:.8rem;
         }
         .production-title {
             font-family:'Jost',sans-serif;
@@ -645,8 +645,20 @@
             font-size:1.3rem; font-weight:700;
         }
         .production-desc {
-            font-size:.93rem; color:var(--text-light); line-height:1.9;
-            margin-bottom:1.5rem;
+            font-size:.93rem; color:var(--text-light); line-height:1.6;
+            margin-bottom:.5rem;
+        }
+        .production-card .feature-list {
+            list-style:none; padding:0; margin:0;
+        }
+        .production-card .feature-list li {
+            padding:.25rem 0; padding-right:1.2rem;
+            position:relative; font-size:.93rem; line-height:1.5;
+        }
+        .production-card .feature-list li::before {
+            content:''; position:absolute; right:0; top:.65rem;
+            width:6px; height:6px; border-radius:50%;
+            background:var(--navy);
         }
         .production-features {
             display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
@@ -1253,21 +1265,19 @@
             <div class="production-header">
                 <div>
                     <div class="production-title">יום צילום סטנדרטי</div>
-                    <p style="font-size:.88rem;color:var(--text-light);">לדוגמא - יום צילום באחד או יותר מסניפי הרשת</p>
+                    <p style="font-size:.88rem;color:var(--text-light);">לדוגמא - יום צילום באחד מסניפי הרשת או יצירת תוכן עבור המותג</p>
                 </div>
                 <div class="production-price-tag">4,000 &#8362; + מע״מ</div>
             </div>
             <p class="production-desc">
-                יום צילום סטנדרטי מהווה בסיס ליצירת תוכן שוטף לפלטפורמות הדיגיטליות. מספר ימי צילום: <strong>1-2 ימים בחודש</strong> (בהתאם לצרכים ובתיאום משותף).
-            </p>
+                יום צילום סטנדרטי מהווה בסיס ליצירת תוכן שוטף לפלטפורמות הדיגיטליות.            </p>
             <ul class="feature-list">
                 <li><strong>בניית קריאייטיב</strong> - פיתוח קונספט והכנה ליום הצילום</li>
-                <li><strong>צילום מקצועי</strong> - צילום וידאו וסטילס במיקום</li>
+                <li><strong>יצירת תוכן מקצועי</strong></li>
                 <li><strong>4 רילסים ערוכים</strong> - צילום, עריכה והתאמה לפלטפורמות</li>
                 <li><strong>תמונות סטילס</strong> - לשימוש שוטף בפלטפורמות השונות</li>
-                <li><strong>עד 2 סבבי תיקונים</strong> - עבור הרילסים מתוך יום הצילום</li>
             </ul>
-            <p style="margin-top:1.2rem; font-size:.78rem; color:var(--text-light);">* הפקות מורכבות (דוגמניות, לוקיישנים, סטיילינג וכו׳) יתומחרו בנפרד.</p>
+            <p style="margin-top:1.2rem; font-size:.78rem; color:var(--text-light);">* הפקות מורכבות (דוגמניות, לוקיישנים, סטיילינג, איפור, שיער, צלם סטילס וכו׳) יתומחרו בנפרד.</p>
         </div>
     </div>
 </section>
@@ -1295,12 +1305,6 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                 </div>
                 <p>השירות אינו כולל ניהול קמפיינים ממומנים (ניתן להוסיף בתמחור נפרד)</p>
-            </div>
-            <div class="clarity-item reveal">
-                <div class="clarity-icon">
-                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
-                </div>
-                <p>יצירת קשר עם משפיענים אינה כוללת את עלות התשלום למשפיען עצמו</p>
             </div>
             <div class="clarity-item reveal">
                 <div class="clarity-icon">
@@ -1338,7 +1342,7 @@
                 <div class="section-line"></div>
             </div>
             <p class="summary-text">
-                המטרה היא לא רק ״לנהל עמודים״ - אלא <strong>לבנות נכס דיגיטלי חזק, עקבי ובעל חיבור רגשי לקהל</strong>.
+                המטרה היא <strong>לבנות נכס דיגיטלי חזק, עקבי ובעל חיבור רגשי לקהל</strong>.
             </p>
             <p class="summary-text">
                 באמצעות שילוב של אסטרטגיה, קריאייטיב וביצוע מדויק - <br>
