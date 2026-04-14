@@ -1282,7 +1282,7 @@
             <div class="allin-per">+ מע״מ / לחודש</div>
         </div>
         <div style="text-align:center; margin-top:16px;">
-            <a href="#signature" class="cta-button">
+            <a href="#signature" class="cta-button" id="allinCta" onclick="selectAllIn()">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                 בחירת חבילה וחתימה
             </a>
@@ -1415,6 +1415,7 @@
                 <input type="hidden" name="_template" value="table">
                 <input type="hidden" name="_next" id="formRedirect">
                 <input type="file" name="attachment" id="pdfAttachment" style="display:none;">
+                <input type="hidden" name="חבילה נבחרת" id="selectedPackageField" value="">
                 <div class="signature-grid">
                     <div class="signature-field">
                         <label for="sig-date">תאריך</label>
@@ -1518,6 +1519,21 @@
     // Package selection & calculator
     const selectedPackages = new Set();
 
+    function selectAllIn() {
+        // Select all 4 packages
+        document.querySelectorAll('.package-card').forEach(card => {
+            const name = card.dataset.name;
+            const btn = card.querySelector('.package-select');
+            if (!selectedPackages.has(name)) {
+                selectedPackages.add(name);
+                card.classList.add('selected');
+                btn.classList.add('active');
+                btn.textContent = '✓ נבחר';
+            }
+        });
+        updateCalculator();
+    }
+
     function togglePackage(btn) {
         const card = btn.closest('.package-card');
         const name = card.dataset.name;
@@ -1539,11 +1555,20 @@
 
     function updateCalculator() {
         const container = document.getElementById('calcRows');
+        const pkgField = document.getElementById('selectedPackageField');
         container.innerHTML = '';
 
         if(selectedPackages.size === 0) {
             container.innerHTML = '<div class="calc-row"><span class="label" style="color:var(--text-light);font-style:italic;">בחרו חבילות למעלה כדי לראות את הסיכום</span></div>';
+            pkgField.value = '';
             return;
+        }
+
+        // Update hidden field
+        if(selectedPackages.size === 4) {
+            pkgField.value = 'ALL-IN (אינסטגרם + טיקטוק + פייסבוק + וואטסאפ) - 23,900 ₪ + מע״מ / חודש';
+        } else {
+            pkgField.value = Array.from(selectedPackages).join(' + ');
         }
 
         let total = 0;
