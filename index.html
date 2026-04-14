@@ -1282,7 +1282,7 @@
             <div class="allin-per">+ מע״מ / לחודש</div>
         </div>
         <div style="text-align:center; margin-top:16px;">
-            <button type="button" class="cta-button" id="allinCta" onclick="selectAllIn(); this.innerHTML='✓ חבילת ALL-IN נבחרה'; this.style.opacity='.7';">
+            <button type="button" class="cta-button" id="allinCta" onclick="toggleAllIn()">
                 בחירת חבילה
             </button>
         </div>
@@ -1518,20 +1518,34 @@
     // Package selection & calculator
     const selectedPackages = new Set();
 
-    function selectAllIn() {
-        // Select all 4 packages
+    let allInSelected = false;
+
+    function toggleAllIn() {
+        const allinBtn = document.getElementById('allinCta');
+        allInSelected = !allInSelected;
+
         document.querySelectorAll('.package-card').forEach(card => {
             const name = card.dataset.name;
             const btn = card.querySelector('.package-select');
-            if (!selectedPackages.has(name)) {
+            if (allInSelected) {
                 selectedPackages.add(name);
                 card.classList.add('selected');
                 btn.classList.add('active');
                 btn.textContent = '✓ נבחר';
+            } else {
+                selectedPackages.delete(name);
+                card.classList.remove('selected');
+                btn.classList.remove('active');
+                btn.textContent = 'בחירת חבילה';
             }
         });
+
+        allinBtn.innerHTML = allInSelected ? '✓ חבילת ALL-IN נבחרה' : 'בחירת חבילה';
+        allinBtn.style.opacity = allInSelected ? '.7' : '1';
         updateCalculator();
     }
+
+    function selectAllIn() { toggleAllIn(); }
 
     function togglePackage(btn) {
         const card = btn.closest('.package-card');
