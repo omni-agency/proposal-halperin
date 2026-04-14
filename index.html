@@ -1184,7 +1184,7 @@
                     <div class="package-price">10,000 &#8362; <span>+ מע״מ / חודש</span></div>
                 </div>
                 <ul class="package-features">
-                    <li>6-8 תכנים מרכזיים בחודש (רילסים/קרוסלות)</li>
+                    <li>6-8 תכנים מרכזיים בחודש</li>
                     <li>ניהול סטוריז יומי</li>
                     <li>בניית גריד ונראות פיד</li>
                     <li>כתיבה שיווקית (קופי)</li>
@@ -1200,7 +1200,7 @@
                     <div class="package-price">10,000 &#8362; <span>+ מע״מ / חודש</span></div>
                 </div>
                 <ul class="package-features">
-                    <li>6-8 סרטונים בחודש</li>
+                    <li>6-8 תכנים בחודש</li>
                     <li>פיתוח קונספטים מותאמים לפלטפורמה</li>
                     <li>עבודה עם טרנדים ושפה טבעית</li>
                     <li>התאמת התוכן לקהל צעיר ודינמי</li>
@@ -1265,6 +1265,7 @@
         <div class="section-header">
             <span class="section-number">05</span>
             <h2 class="section-title">חבילת ALL-IN</h2>
+            <p class="section-subtitle">לאחר הפגישה הראשונית שהתקיימה ובהתאם להבנת צרכי החברה, ההמלצה שלנו היא בחירה בחבילת All-In לניהול הוליסטי של המותג.</p>
             <div class="section-line"></div>
         </div>
         <div class="allin-card">
@@ -1277,8 +1278,14 @@
                 <span>וואטסאפ</span>
             </div>
             <div class="allin-old-price">30,000 &#8362;</div>
-            <div class="allin-price">25,000 <span>&#8362;</span></div>
+            <div class="allin-price">23,900 <span>&#8362;</span></div>
             <div class="allin-per">+ מע״מ / לחודש</div>
+        </div>
+        <div style="text-align:center; margin-top:16px;">
+            <a href="#signature" class="cta-button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                בחירת חבילה וחתימה
+            </a>
         </div>
     </div>
 </section>
@@ -1449,7 +1456,6 @@
     <div class="footer-contact">
         <a href="mailto:omni.d.agency@gmail.com">omni.d.agency@gmail.com</a>
         <a href="tel:0544455986">054-4455986</a>
-        <a href="tel:0502722039">050-272-2039</a>
     </div>
     <div class="footer-line"></div>
     <p class="footer-copy">&copy; OMNI 2026 - All rights reserved</p>
@@ -1555,11 +1561,11 @@
         if(selectedPackages.size === 4) {
             const savingsRow = document.createElement('div');
             savingsRow.className = 'calc-row savings';
-            savingsRow.innerHTML = `<span class="label">חיסכון עם חבילת ALL-IN</span><span class="value">-5,000 &#8362;</span>`;
+            savingsRow.innerHTML = `<span class="label">חיסכון עם חבילת ALL-IN</span><span class="value">-6,100 &#8362;</span>`;
             container.appendChild(savingsRow);
             const totalRow = document.createElement('div');
             totalRow.className = 'calc-row total';
-            totalRow.innerHTML = `<span class="label">סה״כ (ALL-IN)</span><span class="value">25,000 &#8362; + מע״מ / חודש</span>`;
+            totalRow.innerHTML = `<span class="label">סה״כ (ALL-IN)</span><span class="value">23,900 &#8362; + מע״מ / חודש</span>`;
             container.appendChild(totalRow);
         } else {
             const totalRow = document.createElement('div');
