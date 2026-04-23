@@ -483,7 +483,7 @@
 
         /* ── Platform Packages ── */
         .packages-grid {
-            display:grid; grid-template-columns:repeat(4, 1fr);
+            display:grid; grid-template-columns:repeat(3, 1fr);
             gap:1rem;
         }
         .package-card {
@@ -921,7 +921,7 @@
             .included-light-grid { grid-template-columns:1fr; }
 
             /* Packages - 2 columns */
-            .packages-grid { grid-template-columns:1fr 1fr; }
+            .packages-grid { grid-template-columns:1fr; }
 
             /* ALL-IN */
             .allin-card { padding:2rem 1.2rem; }
@@ -1194,22 +1194,6 @@
                 <button class="package-select" onclick="togglePackage(this)">בחירת חבילה</button>
             </div>
 
-            <!-- TikTok -->
-            <div class="package-card reveal" data-price="10000" data-name="טיקטוק">
-                <div class="package-header-row">
-                    <div class="package-icon tiktok"><svg width="14" height="14" fill="white" viewBox="0 0 16 16"><path d="M9 0h1.98c.144.715.54 1.617 1.235 2.512C12.895 3.389 13.797 4 15 4v2c-1.753 0-3.07-.814-4-1.829V11a5 5 0 1 1-5-5v2a3 3 0 1 0 3 3z"/></svg></div>
-                    <div class="package-price">10,000 &#8362; <span>+ מע״מ / חודש</span></div>
-                </div>
-                <ul class="package-features">
-                    <li>6-8 תכנים בחודש</li>
-                    <li>פיתוח קונספטים מותאמים לפלטפורמה</li>
-                    <li>עבודה עם טרנדים ושפה טבעית</li>
-                    <li>התאמת התוכן לקהל צעיר ודינמי</li>
-                    <li>כתיבת קופי וכיתובים מותאמי טיקטוק</li>
-                </ul>
-                <button class="package-select" onclick="togglePackage(this)">בחירת חבילה</button>
-            </div>
-
             <!-- Facebook -->
             <div class="package-card reveal" data-price="5000" data-name="פייסבוק">
                 <div class="package-header-row">
@@ -1274,12 +1258,11 @@
             <h3 class="allin-title">ניהול מלא של כל הפלטפורמות</h3>
             <div class="allin-platforms">
                 <span>אינסטגרם</span>
-                <span>טיקטוק</span>
                 <span>פייסבוק</span>
                 <span>וואטסאפ</span>
             </div>
-            <div class="allin-old-price">30,000 &#8362;</div>
-            <div class="allin-price">23,900 <span>&#8362;</span></div>
+            <div class="allin-old-price">20,000 &#8362;</div>
+            <div class="allin-price">15,500 <span>&#8362;</span></div>
             <div class="allin-per">+ מע״מ / לחודש</div>
         </div>
         <div style="text-align:center; margin-top:16px;">
@@ -1579,8 +1562,8 @@
         }
 
         // Update hidden field
-        if(selectedPackages.size === 4) {
-            pkgField.value = 'ALL-IN (אינסטגרם + טיקטוק + פייסבוק + וואטסאפ) - 23,900 ₪ + מע״מ / חודש';
+        if(selectedPackages.size === 3) {
+            pkgField.value = 'ALL-IN (אינסטגרם + פייסבוק + וואטסאפ) - 15,500 ₪ + מע״מ / חודש';
         } else {
             pkgField.value = Array.from(selectedPackages).join(' + ');
         }
@@ -1597,14 +1580,14 @@
             }
         });
 
-        if(selectedPackages.size === 4) {
+        if(selectedPackages.size === 3) {
             const savingsRow = document.createElement('div');
             savingsRow.className = 'calc-row savings';
-            savingsRow.innerHTML = `<span class="label">חיסכון עם חבילת ALL-IN</span><span class="value">-6,100 &#8362;</span>`;
+            savingsRow.innerHTML = `<span class="label">חיסכון עם חבילת ALL-IN</span><span class="value">-4,500 &#8362;</span>`;
             container.appendChild(savingsRow);
             const totalRow = document.createElement('div');
             totalRow.className = 'calc-row total';
-            totalRow.innerHTML = `<span class="label">סה״כ (ALL-IN)</span><span class="value">23,900 &#8362; + מע״מ / חודש</span>`;
+            totalRow.innerHTML = `<span class="label">סה״כ (ALL-IN)</span><span class="value">15,500 &#8362; + מע״מ / חודש</span>`;
             container.appendChild(totalRow);
         } else {
             const totalRow = document.createElement('div');
